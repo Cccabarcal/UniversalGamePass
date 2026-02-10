@@ -15,8 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path
 
+from .views import CrearSuscripcionView, SuscripcionFormView
+
 urlpatterns = [
+    path("", lambda request: redirect("suscripciones/nueva/")),
     path('admin/', admin.site.urls),
+    path("suscripciones/nueva/", SuscripcionFormView.as_view(), name="suscripcion_form"),
+    path("suscripciones/crear/", CrearSuscripcionView.as_view(), name="crear_suscripcion"),
 ]
