@@ -1,8 +1,17 @@
 from datetime import timedelta
+
 from django.utils import timezone
+
 from ..models import Suscripcion
 
+
 class SuscripcionBuilder:
+    """Builder para construir objetos Suscripcion de forma segura y validada.
+    
+    Garantiza que el objeto sea válido antes de persistirlo en la BD,
+    usando interfaz fluida (encadenamiento de métodos).
+    """
+
     def para_usuario(self, user):
         if user is None:
             raise ValueError("El usuario es obligatorio")

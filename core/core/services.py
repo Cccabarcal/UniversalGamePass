@@ -5,6 +5,12 @@ from .models import Plan
 
 
 class SuscripcionService:
+    """Servicio de aplicación para orquestar la creación de suscripciones.
+    
+    Coordina el flujo entre el Builder (construcción del modelo) y la Factory
+    (inyección del notificador), aplicando inyección de dependencias.
+    """
+
     def __init__(self, notificador):
         self.notificador = notificador
 

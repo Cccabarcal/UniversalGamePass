@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crear Suscripcion</title>
+  <title>Login - Suscripciones</title>
   <style>
     :root {
       color-scheme: light;
@@ -26,7 +26,7 @@
       padding: 32px 16px;
     }
     .card {
-      width: min(520px, 92vw);
+      width: min(400px, 92vw);
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -35,28 +35,26 @@
     }
     h1 {
       margin: 0 0 8px;
-      font-size: 28px;
+      font-size: 24px;
       letter-spacing: 0.2px;
     }
-    p {
-      margin: 0 0 18px;
-      color: var(--muted);
+    .form-group {
+      margin-bottom: 16px;
     }
     label {
       display: block;
       margin-bottom: 6px;
       font-weight: 600;
+      font-size: 14px;
     }
-    select {
+    input {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--border);
       border-radius: 10px;
       font-size: 16px;
-      background: #fff;
     }
     button {
-      margin-top: 16px;
       width: 100%;
       padding: 12px 14px;
       border: none;
@@ -66,44 +64,38 @@
       font-weight: 700;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 8px;
     }
-    .hint {
-      margin-top: 12px;
+    .error {
+      color: #dc2626;
+      padding: 8px;
+      background: #fee2e2;
+      border-radius: 8px;
+      margin-bottom: 12px;
       font-size: 14px;
-      color: var(--muted);
     }
   </style>
 </head>
 <body>
   <main class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h1>Crear suscripcion</h1>
-      {% if user.is_authenticated %}
-        <div style="text-align: right; font-size: 14px;">
-          <p style="margin: 0 0 6px;">{{ user.username }}</p>
-          <a href="/accounts/logout/" style="color: #0f766e; text-decoration: none;">Cerrar sesion</a>
-        </div>
-      {% endif %}
-    </div>
-    <p>Selecciona un plan activo y confirma para crear la suscripcion.</p>
-    {% if messages %}
-      {% for message in messages %}
-        <p style="padding: 8px; border-radius: 8px; background: {% if message.tags %}#dbeafe{% else %}#fef3c7{% endif %};">{{ message }}</p>
+    <h1>Iniciar sesion</h1>
+    {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}
+        <div class="error">{{ error }}</div>
       {% endfor %}
     {% endif %}
-    <form method="post" action="/suscripciones/crear/">
+    <form method="post">
       {% csrf_token %}
-      <label for="plan_id">Plan</label>
-      <select id="plan_id" name="plan_id" required>
-        {% for plan in planes %}
-          <option value="{{ plan.id }}">{{ plan.nombre }} ({{ plan.duracion_dias }} dias)</option>
-        {% empty %}
-          <option value="">No hay planes activos</option>
-        {% endfor %}
-      </select>
-      <button type="submit">Crear suscripcion</button>
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Usuario</label>
+        {{ form.username }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Contraseña</label>
+        {{ form.password }}
+      </div>
+      <button type="submit">Iniciar sesion</button>
     </form>
-    <div class="hint">Debes iniciar sesion para crear una suscripcion.</div>
   </main>
 </body>
 </html>
