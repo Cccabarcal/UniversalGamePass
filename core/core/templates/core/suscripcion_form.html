@@ -1,109 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crear Suscripcion</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f6f4ef;
-      --card: #ffffff;
-      --ink: #1c1b19;
-      --accent: #0f766e;
-      --muted: #6b7280;
-      --border: #e6e2d9;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Georgia", "Times New Roman", serif;
-      color: var(--ink);
-      background: radial-gradient(circle at 15% 15%, #fff1dc, var(--bg));
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 32px 16px;
-    }
-    .card {
-      width: min(520px, 92vw);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-      padding: 28px;
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-      letter-spacing: 0.2px;
-    }
-    p {
-      margin: 0 0 18px;
-      color: var(--muted);
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 16px;
-      background: #fff;
-    }
-    button {
-      margin-top: 16px;
-      width: 100%;
-      padding: 12px 14px;
-      border: none;
-      border-radius: 12px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .hint {
-      margin-top: 12px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-  </style>
-</head>
-<body>
-  <main class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h1>Crear suscripcion</h1>
-      {% if user.is_authenticated %}
-        <div style="text-align: right; font-size: 14px;">
-          <p style="margin: 0 0 6px;">{{ user.username }}</p>
-          <a href="/accounts/logout/" style="color: #0f766e; text-decoration: none;">Cerrar sesion</a>
-        </div>
-      {% endif %}
+{% extends 'core/base.html' %}
+
+{% block title %}Nueva Suscripción - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 40px;">
+    <a href="{% url 'home' %}" style="color: #8b5cf6; text-decoration: none; font-size: 0.95rem;">← Volver al inicio</a>
+  </div>
+
+  <div class="card" style="max-width: 600px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="margin: 0 0 10px; color: #8b5cf6;">Selecciona tu Plan</h1>
+      <p style="color: #a0a0a0; margin: 0;">Elige el plan que mejor se adapte a tus necesidades</p>
     </div>
-    <p>Selecciona un plan activo y confirma para crear la suscripcion.</p>
+
     {% if messages %}
-      {% for message in messages %}
-        <p style="padding: 8px; border-radius: 8px; background: {% if message.tags %}#dbeafe{% else %}#fef3c7{% endif %};">{{ message }}</p>
-      {% endfor %}
-    {% endif %}
-    <form method="post" action="/suscripciones/crear/">
-      {% csrf_token %}
-      <label for="plan_id">Plan</label>
-      <select id="plan_id" name="plan_id" required>
-        {% for plan in planes %}
-          <option value="{{ plan.id }}">{{ plan.nombre }} ({{ plan.duracion_dias }} dias)</option>
-        {% empty %}
-          <option value="">No hay planes activos</option>
+      <div style="margin-bottom: 20px;">
+        {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-success{% else %}alert-info{% endif %}">
+            {{ message }}
+          </div>
         {% endfor %}
-      </select>
-      <button type="submit">Crear suscripcion</button>
-    </form>
-    <div class="hint">Debes iniciar sesion para crear una suscripcion.</div>
-  </main>
-</body>
-</html>
+      </div>
+    {% endif %}
+
+    {% if planes %}
+      <form method="post" action="{% url 'crear_suscripcion' %}">
+        {% csrf_token %}
+        
+        <!-- Planes Grid -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px;">
+          {% for plan in planes %}
+            <div class="plan-option" style="padding: 20px; border: 2px solid rgba(139, 92, 246, 0.2); border-radius: 12px; cursor: pointer; transition: all 0.3s; position: relative;">
+              <input type="radio" name="plan_id" value="{{ plan.id }}" id="plan_{{ plan.id }}" style="position: absolute; top: 10px; right: 10px; cursor: pointer; width: 18px; height: 18px;">
+              
+              <label for="plan_{{ plan.id }}" style="cursor: pointer; display: block;">
+                <h3 style="margin: 0 0 8px; color: #8b5cf6;">{{ plan.nombre }}</h3>
+                <p style="margin: 0 0 15px; color: #a0a0a0; font-size: 0.9rem;">{{ plan.descripcion }}</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px;">
+                  <div>
+                    <p style="color: #8b5cf6; font-weight: 600; margin: 0 0 5px; font-size: 0.85rem;">PRECIO</p>
+                    <p style="margin: 0; font-size: 1.5rem;"><strong>${{ plan.precio }}</strong><span style="font-size: 0.85rem; color: #a0a0a0;"> / mes</span></p>
+                  </div>
+                  <div>
+                    <p style="color: #8b5cf6; font-weight: 600; margin: 0 0 5px; font-size: 0.85rem;">DURACIÓN</p>
+                    <p style="margin: 0;">{{ plan.duracion_dias }} días</p>
+                  </div>
+                </div>
+
+                <div style="background: rgba(139, 92, 246, 0.1); padding: 12px; border-radius: 8px;">
+                  <p style="margin: 0; font-size: 0.9rem; color: #d0d0d0;">Acceso completo a la plataforma durante {{ plan.duracion_dias }} días</p>
+                </div>
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">
+          Confirmar Suscripción
+        </button>
+      </form>
+
+      <a href="{% url 'profile' %}" class="btn btn-outline" style="display: block; text-align: center;">
+        Ver mis suscripciones
+      </a>
+    {% else %}
+      <div class="alert alert-warning">
+        <strong>No hay planes disponibles</strong>
+        <p style="margin: 10px 0 0;">En este momento no hay planes disponibles. Por favor, intenta más tarde.</p>
+      </div>
+      <a href="{% url 'home' %}" class="btn btn-primary">Volver al Inicio</a>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .plan-option:hover {
+    border-color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.05);
+  }
+  
+  #plan_Basico:checked ~ label,
+  #plan_Pro:checked ~ label,
+  #plan_Premium:checked ~ label {
+    border-color: #8b5cf6;
+  }
+</style>
+{% endblock %}

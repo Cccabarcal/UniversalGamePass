@@ -1,120 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mi Perfil</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f6f4ef;
-      --card: #ffffff;
-      --ink: #1c1b19;
-      --accent: #0f766e;
-      --muted: #6b7280;
-      --border: #e6e2d9;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Georgia", "Times New Roman", serif;
-      color: var(--ink);
-      background: radial-gradient(circle at 15% 15%, #fff1dc, var(--bg));
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 32px 16px;
-    }
-    .card {
-      width: min(520px, 92vw);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-      padding: 28px;
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
-      letter-spacing: 0.2px;
-    }
-    .info {
-      background: #f3f4f6;
-      padding: 16px;
-      border-radius: 10px;
-      margin: 16px 0;
-    }
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 8px 0;
-    }
-    .label {
-      font-weight: 600;
-      color: var(--muted);
-    }
-    .value {
-      color: var(--ink);
-    }
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-    }
-    a, button {
-      padding: 12px 14px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-      transition: 0.2s;
-      text-align: center;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-    .btn-primary:hover {
-      opacity: 0.9;
-    }
-    .btn-secondary {
-      background: #f3f4f6;
-      color: var(--ink);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover {
-      background: #e5e7eb;
-    }
-  </style>
-</head>
-<body>
-  <main class="card">
-    <h1>Mi Perfil</h1>
-    
-    <div class="info">
-      <div class="info-row">
-        <span class="label">Usuario:</span>
-        <span class="value">{{ user.username }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Email:</span>
-        <span class="value">{{ user.email }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Miembro desde:</span>
-        <span class="value">{{ user.date_joined|date:"d/m/Y" }}</span>
-      </div>
-    </div>
+{% extends 'core/base.html' %}
 
-    <div class="button-group">
-      <a href="/suscripciones/nueva/" class="btn-primary">Ver Suscripciones</a>
-      <a href="/" class="btn-secondary">Volver al Inicio</a>
-      <a href="/accounts/logout/" class="btn-secondary">Cerrar Sesion</a>
+{% block title %}Mi Perfil - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 40px;">
+    <a href="{% url 'home' %}" style="color: #8b5cf6; text-decoration: none; font-size: 0.95rem;">← Volver al inicio</a>
+  </div>
+
+  <!-- Información del Usuario -->
+  <div class="card">
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
+      <h1 style="margin: 0 0 10px; color: #8b5cf6;">Mi Perfil</h1>
+      <p style="color: #a0a0a0; margin: 0;">Gestiona tu cuenta y suscripciones</p>
     </div>
-  </main>
-</body>
-</html>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+      <div>
+        <p style="color: #8b5cf6; font-weight: 600; margin: 0 0 8px; font-size: 0.85rem; text-transform: uppercase;">Usuario</p>
+        <p style="margin: 0; font-size: 1.25rem;">{{ user.username }}</p>
+      </div>
+      <div>
+        <p style="color: #8b5cf6; font-weight: 600; margin: 0 0 8px; font-size: 0.85rem; text-transform: uppercase;">Email</p>
+        <p style="margin: 0; font-size: 1.1rem;">{{ user.email|default:'No disponible' }}</p>
+      </div>
+      <div>
+        <p style="color: #8b5cf6; font-weight: 600; margin: 0 0 8px; font-size: 0.85rem; text-transform: uppercase;">Miembro desde</p>
+        <p style="margin: 0; font-size: 1.1rem;">{{ user.date_joined|date:'d/m/Y' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suscripciones Activas -->
+  <div class="card" style="margin-top: 30px;">
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
+      <h2 style="margin: 0; color: #8b5cf6;">Mis Suscripciones</h2>
+      <p style="color: #a0a0a0; margin: 5px 0 0; font-size: 0.9rem;">Planes activos y vencidos</p>
+    </div>
+    
+    {% if suscripciones %}
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 2px solid rgba(139, 92, 246, 0.3);">
+              <th style="text-align: left; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Plan</th>
+              <th style="text-align: left; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Inicio</th>
+              <th style="text-align: left; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Vencimiento</th>
+              <th style="text-align: center; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for suscripcion in suscripciones %}
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <td style="padding: 15px 0;">
+                  <strong>{{ suscripcion.plan.nombre }}</strong>
+                  <p style="margin: 5px 0 0; font-size: 0.85rem; color: #a0a0a0;">${{ suscripcion.plan.precio }}/mes</p>
+                </td>
+                <td style="padding: 15px 0; color: #d0d0d0;">{{ suscripcion.fecha_inicio|date:'d/m/Y' }}</td>
+                <td style="padding: 15px 0; color: #d0d0d0;">{{ suscripcion.fecha_fin|date:'d/m/Y' }}</td>
+                <td style="padding: 15px 0; text-align: center;">
+                  {% if suscripcion.estado == 'activa' %}
+                    <span class="badge" style="background: #10b981; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">Activa</span>
+                  {% elif suscripcion.estado == 'vencida' %}
+                    <span class="badge" style="background: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">Vencida</span>
+                  {% else %}
+                    <span class="badge" style="background: #f59e0b; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">{{ suscripcion.estado|capfirst }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-warning">
+        <strong>Sin suscripciones</strong> - No tienes suscripciones activas. <a href="{% url 'suscripcion_form' %}" style="color: #8b5cf6; font-weight: 600;">Crear una ahora →</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Transacciones -->
+  <div class="card" style="margin-top: 30px; margin-bottom: 40px;">
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
+      <h2 style="margin: 0; color: #8b5cf6;">Historial de Transacciones</h2>
+      <p style="color: #a0a0a0; margin: 5px 0 0; font-size: 0.9rem;">Últimos pagos y movimientos</p>
+    </div>
+    
+    {% if transacciones %}
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 2px solid rgba(139, 92, 246, 0.3);">
+              <th style="text-align: left; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Tipo</th>
+              <th style="text-align: left; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Monto</th>
+              <th style="text-align: left; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Fecha</th>
+              <th style="text-align: center; padding: 12px 0; color: #8b5cf6; font-weight: 600;">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaccion in transacciones %}
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <td style="padding: 15px 0; color: #d0d0d0;">{{ transaccion.get_tipo_display }}</td>
+                <td style="padding: 15px 0;">
+                  <strong style="font-size: 1.1rem;">
+                    {% if transaccion.tipo == 'ingreso' %}<span style="color: #10b981;">+</span>{% else %}<span style="color: #ef4444;">-</span>{% endif %}
+                    ${{ transaccion.monto }}
+                  </strong>
+                </td>
+                <td style="padding: 15px 0; color: #a0a0a0;">{{ transaccion.fecha|date:'d/m/Y H:i' }}</td>
+                <td style="padding: 15px 0; text-align: center;">
+                  {% if transaccion.estado == 'completada' %}
+                    <span class="badge" style="background: #10b981; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">✓ Completada</span>
+                  {% elif transaccion.estado == 'pendiente' %}
+                    <span class="badge" style="background: #f59e0b; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">⏳ Pendiente</span>
+                  {% else %}
+                    <span class="badge" style="background: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">✗ {{ transaccion.estado|capfirst }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="color: #a0a0a0; text-align: center; padding: 40px 0;">No hay transacciones realizadas</p>
+    {% endif %}
+  </div>
+
+  <!-- Acciones -->
+  <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 40px;">
+    <a href="{% url 'suscripcion_form' %}" class="btn btn-primary">Gestionar Suscripción</a>
+    <a href="{% url 'logout' %}" class="btn btn-outline">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}

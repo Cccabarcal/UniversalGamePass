@@ -1,3 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Inicio - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero">
+        <h1>Bienvenido a UniversalGamePass</h1>
+        <p>Plataforma de emulación de videojuegos en la nube</p>
+        {% if not user.is_authenticated %}
+            <div class="auth-buttons">
+                <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                <a href="{% url 'signup' %}" class="btn btn-secondary">Registrarse</a>
+            </div>
+        {% else %}
+            <p class="text-primary">¡Hola, {{ user.username }}!</p>
+            <div class="auth-buttons" style="justify-content: center;">
+                <a href="{% url 'profile' %}" class="btn btn-primary">Ver Mi Perfil</a>
+                <a href="{% url 'suscripcion_form' %}" class="btn btn-primary">Gestionar Suscripción</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>🎮 Videojuegos</h2>
+            <p>Accede a una librería completa de videojuegos en la nube. Juega desde cualquier dispositivo sin descargas.</p>
+            {% if user.is_authenticated %}
+                <p class="mt-2"><a href="{% url 'home' %}" class="text-primary">Explorar catálogo →</a></p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>💳 Planes Flexibles</h2>
+            <p>Elige el plan que mejor se adapte a ti. Cambia en cualquier momento con nuestra política flexible.</p>
+            {% if user.is_authenticated %}
+                <p class="mt-2"><a href="{% url 'suscripcion_form' %}" class="text-primary">Ver planes →</a></p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>⚡ Rendimiento</h2>
+            <p>Conexión estable, baja latencia y resolución optimizada para la mejor experiencia de juego.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- VIEJO CONTENIDO (ELIMINAR)
 <!DOCTYPE html>
 <html lang="en">
 <head>

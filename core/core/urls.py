@@ -18,21 +18,27 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
+# Web Views (Django Templates)
 from .views import (
     CrearSuscripcionView,
     SuscripcionFormView,
     HomeView,
     SignUpView,
     ProfileView,
-    PlanListAPIView,
-    PlanDetailAPIView,
-    VideojuegoListAPIView,
-    VideojuegoDetailAPIView,
-    SuscripcionListAPIView,
-    SuscripcionCreateAPIView,
-    SuscripcionDetailAPIView,
-    TransaccionListAPIView,
-    TransaccionDetailAPIView,
+)
+
+# API Views (REST Framework)
+from .views.api import (
+    PlanListAPI,
+    PlanDetailAPI,
+    VideojuegoListAPI,
+    VideojuegoDetailAPI,
+    SuscripcionListAPI,
+    SuscripcionCreateAPI,
+    SuscripcionDetailAPI,
+    TransaccionListAPI,
+    TransaccionDetailAPI,
+    TransaccionEstadisticasAPI,
 )
 
 urlpatterns = [
@@ -47,14 +53,15 @@ urlpatterns = [
     path("suscripciones/crear/", CrearSuscripcionView.as_view(), name="crear_suscripcion"),
     
     # API REST Endpoints 
-    path("api/planes/", PlanListAPIView.as_view(), name="api_planes_list"),
-    path("api/planes/<int:plan_id>/", PlanDetailAPIView.as_view(), name="api_planes_detail"),
-    path("api/videojuegos/", VideojuegoListAPIView.as_view(), name="api_videojuegos_list"),
-    path("api/videojuegos/<int:videojuego_id>/", VideojuegoDetailAPIView.as_view(), name="api_videojuegos_detail"),
-    path("api/suscripciones/", SuscripcionListAPIView.as_view(), name="api_suscripciones_list"),
-    path("api/suscripciones/crear/", SuscripcionCreateAPIView.as_view(), name="api_suscripciones_crear"),
-    path("api/suscripciones/<int:suscripcion_id>/", SuscripcionDetailAPIView.as_view(), name="api_suscripciones_detail"),
-    path("api/transacciones/", TransaccionListAPIView.as_view(), name="api_transacciones_list"),
-    path("api/transacciones/<int:transaccion_id>/", TransaccionDetailAPIView.as_view(), name="api_transacciones_detail"),
+    path("api/planes/", PlanListAPI.as_view(), name="api_planes_list"),
+    path("api/planes/<int:plan_id>/", PlanDetailAPI.as_view(), name="api_planes_detail"),
+    path("api/videojuegos/", VideojuegoListAPI.as_view(), name="api_videojuegos_list"),
+    path("api/videojuegos/<int:videojuego_id>/", VideojuegoDetailAPI.as_view(), name="api_videojuegos_detail"),
+    path("api/suscripciones/", SuscripcionListAPI.as_view(), name="api_suscripciones_list"),
+    path("api/suscripciones/crear/", SuscripcionCreateAPI.as_view(), name="api_suscripciones_crear"),
+    path("api/suscripciones/<int:suscripcion_id>/", SuscripcionDetailAPI.as_view(), name="api_suscripciones_detail"),
+    path("api/transacciones/", TransaccionListAPI.as_view(), name="api_transacciones_list"),
+    path("api/transacciones/<int:transaccion_id>/", TransaccionDetailAPI.as_view(), name="api_transacciones_detail"),
+    path("api/transacciones/estadisticas/", TransaccionEstadisticasAPI.as_view(), name="api_transacciones_estadisticas"),
 ]
 

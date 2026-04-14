@@ -1,101 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login - Suscripciones</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f6f4ef;
-      --card: #ffffff;
-      --ink: #1c1b19;
-      --accent: #0f766e;
-      --muted: #6b7280;
-      --border: #e6e2d9;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Georgia", "Times New Roman", serif;
-      color: var(--ink);
-      background: radial-gradient(circle at 15% 15%, #fff1dc, var(--bg));
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 32px 16px;
-    }
-    .card {
-      width: min(400px, 92vw);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-      padding: 28px;
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 24px;
-      letter-spacing: 0.2px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 12px 14px;
-      border: none;
-      border-radius: 12px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    .error {
-      color: #dc2626;
-      padding: 8px;
-      background: #fee2e2;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-  <main class="card">
-    <h1>Iniciar sesion</h1>
+{% extends 'core/base.html' %}
+
+{% block title %}Iniciar Sesión - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="max-width: 450px; margin: 80px auto 0;">
+    <!-- Encabezado -->
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="margin: 0 0 8px; color: #8b5cf6;">Iniciar Sesión</h1>
+      <p style="color: #a0a0a0; margin: 0;">Accede a tu cuenta en UniversalGamePass</p>
+    </div>
+
+    <!-- Errores -->
     {% if form.non_field_errors %}
-      {% for error in form.non_field_errors %}
-        <div class="error">{{ error }}</div>
-      {% endfor %}
+      <div class="alert alert-error" style="margin-bottom: 20px;">
+        {% for error in form.non_field_errors %}
+          <p style="margin: 5px 0; font-size: 0.9rem;">{{ error }}</p>
+        {% endfor %}
+      </div>
     {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="{{ form.username.id_for_label }}">Usuario</label>
-        {{ form.username }}
-      </div>
-      <div class="form-group">
-        <label for="{{ form.password.id_for_label }}">Contraseña</label>
-        {{ form.password }}
-      </div>
-      <button type="submit">Iniciar sesion</button>
-    </form>
-  </main>
-</body>
-</html>
+
+    <!-- Formulario -->
+    <div class="card">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- Username -->
+        <div style="margin-bottom: 24px;">
+          <label for="{{ form.username.id_for_label }}" style="display: block; margin-bottom: 8px; color: #8b5cf6; font-weight: 600; font-size: 0.9rem; text-transform: uppercase;">
+            Usuario o Email
+          </label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="alert alert-error" style="margin-top: 6px; padding: 8px 12px; font-size: 0.85rem;">
+              {% for error in form.username.errors %}
+                <p style="margin: 0;">{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Password -->
+        <div style="margin-bottom: 30px;">
+          <label for="{{ form.password.id_for_label }}" style="display: block; margin-bottom: 8px; color: #8b5cf6; font-weight: 600; font-size: 0.9rem; text-transform: uppercase;">
+            Contraseña
+          </label>
+          {{ form.password }}
+          {% if form.password.errors %}
+            <div class="alert alert-error" style="margin-top: 6px; padding: 8px 12px; font-size: 0.85rem;">
+              {% for error in form.password.errors %}
+                <p style="margin: 0;">{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 20px;">
+          Iniciar Sesión
+        </button>
+
+        <!-- Signup Link -->
+        <p style="text-align: center; color: #a0a0a0; margin: 0;">
+          ¿No tienes cuenta? <a href="{% url 'signup' %}" style="color: #8b5cf6; text-decoration: none; font-weight: 600;">Regístrate aquí →</a>
+        </p>
+      </form>
+    </div>
+
+    <!-- Opciones adicionales -->
+    <div style="text-align: center; margin-top: 30px; padding-bottom: 40px;">
+      <p style="color: #6b7280; font-size: 0.85rem; margin: 0;">
+        <a href="{% url 'home' %}" style="color: #8b5cf6; text-decoration: none;">← Volver al inicio</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 10px;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+  }
+
+  input[type="text"]::placeholder,
+  input[type="password"]::placeholder {
+    color: #6b7280;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    background: rgba(255,255,255,0.08);
+    border-color: #8b5cf6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  }
+</style>
+{% endblock %}
