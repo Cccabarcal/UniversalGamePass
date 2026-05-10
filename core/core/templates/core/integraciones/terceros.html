@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Juegos populares - terceros" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 25px;">
+    <a href="{% url 'home' %}" style="color: #8b5cf6; text-decoration: none;">{% trans "← Volver al inicio" %}</a>
+  </div>
+
+  <div class="card">
+    <h1 style="margin: 0 0 6px; color: #8b5cf6;">{% trans "Juegos populares (API de terceros)" %}</h1>
+    <p style="color: #a0a0a0; margin: 0 0 8px;">{% trans "Datos consumidos vía Adapter Pattern (Inversión de Dependencias)." %}</p>
+    <p style="color: #6b7280; font-size: 0.85rem;">{% trans "Fuente:" %} <code>{{ fuente }}</code></p>
+  </div>
+
+  <div class="grid">
+    {% for juego in juegos %}
+      {% if juego.error %}
+        <div class="card" style="grid-column: 1/-1;">
+          <p class="alert alert-warning" style="margin: 0;">{{ juego.mensaje }}</p>
+        </div>
+      {% else %}
+        <div class="card">
+          {% if juego.imagen %}
+            <img src="{{ juego.imagen }}" alt="{{ juego.titulo }}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px;">
+          {% endif %}
+          <h3 style="margin: 0 0 4px; color: #8b5cf6;">{{ juego.titulo }}</h3>
+          <p style="margin: 0; color: #a0a0a0; font-size: 0.85rem;">{{ juego.genero }} · {{ juego.plataforma }}</p>
+          {% if juego.url %}
+            <a href="{{ juego.url }}" target="_blank" rel="noopener" class="btn btn-secondary" style="margin-top: 12px; font-size: 0.85rem; padding: 6px 12px;">{% trans "Ver en sitio externo →" %}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

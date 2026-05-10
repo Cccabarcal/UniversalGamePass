@@ -1,0 +1,82 @@
+# UniversalGamePass - English translations
+msgid ""
+msgstr ""
+"Project-Id-Version: UniversalGamePass 2.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgid "Inicio"
+msgstr "Home"
+
+msgid "Catálogo"
+msgstr "Catalog"
+
+msgid "Trending"
+msgstr "Trending"
+
+msgid "Aliado"
+msgstr "Partner"
+
+msgid "Perfil"
+msgstr "Profile"
+
+msgid "Mi Suscripción"
+msgstr "My Subscription"
+
+msgid "Juego"
+msgstr "Game"
+
+msgid "Cerrar Sesión"
+msgstr "Log Out"
+
+msgid "Iniciar Sesión"
+msgstr "Log In"
+
+msgid "Registrarse"
+msgstr "Sign Up"
+
+msgid "Idioma"
+msgstr "Language"
+
+msgid "← Volver al inicio"
+msgstr "← Back to home"
+
+msgid "Juegos populares - terceros"
+msgstr "Popular games - third party"
+
+msgid "Juegos populares (API de terceros)"
+msgstr "Popular games (third-party API)"
+
+msgid "Datos consumidos vía Adapter Pattern (Inversión de Dependencias)."
+msgstr "Data consumed via Adapter Pattern (Dependency Inversion)."
+
+msgid "Fuente:"
+msgstr "Source:"
+
+msgid "Ver en sitio externo →"
+msgstr "View on external site →"
+
+msgid "Equipo aliado"
+msgstr "Partner team"
+
+msgid "Servicio del equipo aliado"
+msgstr "Partner team service"
+
+msgid "Información obtenida en tiempo real del endpoint que expone el equipo aliado."
+msgstr "Information fetched in real time from the endpoint exposed by the partner team."
+
+msgid "URL no configurada."
+msgstr "URL not configured."
+
+msgid "Define la variable de entorno"
+msgstr "Set the environment variable"
+
+msgid "con la URL JSON del equipo aliado y reinicia el contenedor."
+msgstr "with the partner JSON URL and restart the container."
+
+msgid "Error consumiendo el endpoint del aliado."
+msgstr "Error consuming the partner endpoint."
+
+msgid "URL:"
+msgstr "URL:"

@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Catálogo de Juegos - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+    <div>
+      <h1 style="margin: 0 0 6px; color: #8b5cf6;">Catálogo de Videojuegos</h1>
+      <p style="color: #a0a0a0; margin: 0;">Selecciona un juego para empezar a jugar.</p>
+    </div>
+    {% if user.is_staff %}
+      <a href="{% url 'crear_juego' %}" class="btn btn-primary">+ Crear videojuego</a>
+    {% endif %}
+  </div>
+
+  {% if not tiene_suscripcion %}
+    <div class="alert alert-warning" style="margin-bottom: 30px;">
+      <strong>No tienes una suscripción activa.</strong>
+      Algunos juegos requieren suscripción para poder ejecutarse.
+      <a href="{% url 'suscripcion_form' %}" style="color: #8b5cf6; font-weight: 600;">Ver planes →</a>
+    </div>
+  {% endif %}
+
+  {% if juegos %}
+    <div class="grid">
+      {% for juego in juegos %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            {% if juego.imagen_url %}
+              <img src="{{ juego.imagen_url }}" alt="{{ juego.nombre }}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+            {% else %}
+              <div style="width: 100%; height: 160px; background: linear-gradient(135deg, #8b5cf6, #5b21b6); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">
+                🎮
+              </div>
+            {% endif %}
+
+            <h2 style="margin: 0 0 6px;">{{ juego.nombre }}</h2>
+            <p style="color: #a0a0a0; font-size: 0.85rem; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px;">{{ juego.genero }}</p>
+            <p style="color: #d0d0d0; margin: 0 0 15px;">{{ juego.descripcion|truncatewords:25 }}</p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px;">
+              <span style="background: rgba(139, 92, 246, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; color: #c4b5fd;">{{ juego.get_slug_ejecutable_display }}</span>
+              {% if juego.requiere_suscripcion %}
+                <span style="background: rgba(245, 158, 11, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; color: #fcd34d;">Requiere suscripción</span>
+              {% else %}
+                <span style="background: rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; color: #6ee7b7;">Acceso libre</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            {% if juego.requiere_suscripcion and not tiene_suscripcion %}
+              <a href="{% url 'suscripcion_form' %}" class="btn btn-secondary" style="flex: 1; text-align: center;">Suscribirse para jugar</a>
+            {% else %}
+              <a href="{% url 'jugar_juego' juego.id %}" class="btn btn-primary" style="flex: 1; text-align: center;">▶ Jugar</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center;">
+      <h2>Aún no hay juegos en el catálogo</h2>
+      <p style="color: #a0a0a0; margin-top: 10px;">El catálogo está vacío. {% if user.is_staff %}¡Crea el primero!{% endif %}</p>
+      {% if user.is_staff %}
+        <a href="{% url 'crear_juego' %}" class="btn btn-primary" style="margin-top: 20px;">+ Crear el primer videojuego</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

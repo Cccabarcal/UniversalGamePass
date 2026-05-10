@@ -5,6 +5,13 @@ from django.db import models
 class Videojuego(models.Model):
     """Modelo para los videojuegos disponibles en la plataforma"""
 
+    SLUG_CHOICES = [
+        ('snake', 'Snake'),
+        ('tetris', 'Tetris'),
+        ('pong', 'Pong'),
+        ('breakout', 'Breakout'),
+    ]
+
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
     genero = models.CharField(max_length=100)
@@ -12,6 +19,16 @@ class Videojuego(models.Model):
     precio_compra = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     disponible = models.BooleanField(default=True)
     fecha_lanzamiento = models.DateField(null=True, blank=True)
+    slug_ejecutable = models.CharField(
+        max_length=30,
+        choices=SLUG_CHOICES,
+        default='snake',
+        help_text="Identificador del motor de juego HTML5 a ejecutar"
+    )
+    requiere_suscripcion = models.BooleanField(
+        default=True,
+        help_text="Si esta activo, el usuario necesita suscripcion vigente para jugarlo"
+    )
     creado_en = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

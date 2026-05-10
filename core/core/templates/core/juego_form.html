@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Crear Videojuego - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 30px;">
+    <a href="{% url 'catalogo_juegos' %}" style="color: #8b5cf6; text-decoration: none; font-size: 0.95rem;">← Volver al catálogo</a>
+  </div>
+
+  <div class="card" style="max-width: 720px; margin: 0 auto;">
+    <h1 style="margin: 0 0 8px; color: #8b5cf6;">Crear Videojuego</h1>
+    <p style="color: #a0a0a0; margin: 0 0 30px;">Registra un nuevo juego para que aparezca en el catálogo.</p>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-error">
+        {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <p style="color: #a0a0a0; font-size: 0.8rem; margin-top: 4px;">{{ field.help_text }}</p>
+          {% endif %}
+          {% if field.errors %}
+            <div class="alert alert-error" style="margin-top: 6px; padding: 8px 12px; font-size: 0.85rem;">
+              {% for error in field.errors %}<p style="margin: 0;">{{ error }}</p>{% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Crear videojuego</button>
+        <a href="{% url 'catalogo_juegos' %}" class="btn btn-secondary" style="flex: 1; text-align: center;">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  input[type="text"], input[type="url"], input[type="number"], input[type="date"], textarea, select {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+  }
+  input[type="checkbox"] { width: 18px; height: 18px; }
+</style>
+{% endblock %}
