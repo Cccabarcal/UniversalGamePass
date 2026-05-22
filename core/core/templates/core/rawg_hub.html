@@ -1,0 +1,137 @@
+{% extends 'core/base.html' %}
+
+{% block title %}RAWG Hub - UniversalGamePass{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Header RAWG Hub -->
+  <div style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+      <div>
+        <h1 style="margin: 0 0 6px; color: #8b5cf6; font-size: 2.5rem;">🎮 RAWG Hub</h1>
+        <p style="color: #a0a0a0; margin: 0 0 8px; font-size: 0.95rem;">
+          Descubre juegos nuevos y lanzamientos recientes de la base de datos más completa de gaming.
+        </p>
+        <p style="color: #8b5cf6; margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+          📊 API de Terceros - Fuente: RAWG.io
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Badge -->
+  <div style="margin-bottom: 25px; padding: 16px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%); border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3); border-left: 4px solid #8b5cf6;">
+    <div style="display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;">
+      <span style="font-size: 1.5rem;">🌐</span>
+      <div>
+        <p style="margin: 0 0 4px; color: #c4b5fd; font-weight: 600; font-size: 0.95rem;">
+          Integración con RAWG.io
+        </p>
+        <p style="margin: 0; color: #a0a0a0; font-size: 0.85rem; line-height: 1.5;">
+          Base de datos profesional con información completa, ratings verificados, scores Metacritic, 
+          múltiples plataformas (PC, PS4, PS5, Nintendo Switch) y descripciones de juegos.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  {% if tiene_error %}
+    <div class="alert alert-error" style="margin-bottom: 30px; background: rgba(239, 68, 68, 0.1); border-left-color: #ef4444; color: #fca5a5;">
+      <strong>⚠️ No pudimos cargar los juegos en este momento.</strong>
+      <p style="margin-top: 8px; margin-bottom: 0; font-size: 0.9rem;">
+        Por favor, intenta más tarde o visita <a href="https://rawg.io/" target="_blank" style="color: #fca5a5; text-decoration: underline;">RAWG.io</a> directamente.
+      </p>
+    </div>
+  {% elif juegos %}
+    <!-- Grid de Juegos -->
+    <div class="grid" style="margin-top: 30px;">
+      {% for juego in juegos %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+          <!-- Badges de Rating Superior -->
+          <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; z-index: 10; flex-wrap: wrap; justify-content: flex-end;">
+            {% if juego.metacritic %}
+              <div style="background: linear-gradient(135deg, #10b981, #059669); padding: 6px 12px; border-radius: 6px; font-weight: bold; color: white; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">
+                🎯 {{ juego.metacritic }}
+              </div>
+            {% endif %}
+            {% if juego.rating %}
+              <div style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 6px 12px; border-radius: 6px; font-weight: bold; color: white; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">
+                ⭐ {{ juego.rating|floatformat:1 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Imagen -->
+          <div>
+            {% if juego.imagen %}
+              <img src="{{ juego.imagen }}" alt="{{ juego.titulo }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+            {% else %}
+              <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #8b5cf6, #5b21b6); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem;">
+                🎮
+              </div>
+            {% endif %}
+
+            <!-- Contenido -->
+            <h2 style="margin: 0 0 6px; font-size: 1.2rem; color: #c4b5fd;">{{ juego.titulo }}</h2>
+            
+            <p style="color: #a0a0a0; font-size: 0.8rem; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+              {{ juego.genero }}
+            </p>
+
+            {% if juego.fecha_lanzamiento %}
+              <p style="color: #8b5cf6; font-size: 0.8rem; margin: 0 0 10px; display: flex; align-items: center; gap: 4px;">
+                📅 {{ juego.fecha_lanzamiento }}
+              </p>
+            {% endif %}
+
+            {% if juego.descripcion %}
+              <p style="color: #d0d0d0; margin: 0 0 15px; font-size: 0.9rem; line-height: 1.4;">
+                {{ juego.descripcion }}
+              </p>
+            {% endif %}
+
+            <!-- Tags -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px;">
+              <span style="background: rgba(139, 92, 246, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; color: #c4b5fd; font-weight: 500;">
+                {{ juego.plataforma }}
+              </span>
+              <span style="background: rgba(99, 102, 241, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; color: #a5b4fc; font-weight: 500;">
+                Información
+              </span>
+            </div>
+          </div>
+
+          <!-- Botón -->
+          <a href="{{ juego.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; text-align: center; padding: 0.8rem 1.3rem; font-weight: 600;">
+            🔗 Ver en RAWG.io
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3rem;">
+      <h2 style="color: #8b5cf6; margin-bottom: 1rem;">No hay juegos disponibles</h2>
+      <p style="color: #a0a0a0; margin-bottom: 1.5rem;">
+        Por favor, intenta más tarde para ver los juegos recientemente lanzados en RAWG.io.
+      </p>
+      <a href="https://rawg.io/" target="_blank" class="btn btn-primary">
+        Visitar RAWG.io
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); 
+    gap: 20px; 
+  }
+  @media (max-width: 768px) { 
+    .grid { 
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    } 
+  }
+</style>
+{% endblock %}

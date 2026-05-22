@@ -13,6 +13,7 @@ from .web_views import (
 )
 from .juegos_views import (
     CatalogoJuegosView,
+    RAWGHubView,
     JugarView,
     CrearJuegoView,
     VideojuegoForm,
@@ -27,6 +28,6 @@ from .integraciones_views import (
 __all__ = [
     'HomeView', 'SignUpView', 'SignUpForm', 'ProfileView',
     'SuscripcionFormView', 'CrearSuscripcionView', 'CancelarSuscripcionView',
-    'CatalogoJuegosView', 'JugarView', 'CrearJuegoView', 'VideojuegoForm',
+    'CatalogoJuegosView', 'RAWGHubView', 'JugarView', 'CrearJuegoView', 'VideojuegoForm',
     'SistemaInfoAPI', 'AliadoInfoAPI', 'AliadoInfoView', 'TerceraAPIView',
 ]

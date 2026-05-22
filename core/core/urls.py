@@ -13,6 +13,7 @@ from .views import (
     SignUpView,
     ProfileView,
     CatalogoJuegosView,
+    RAWGHubView,
     JugarView,
     CrearJuegoView,
     SistemaInfoAPI,
@@ -42,6 +43,7 @@ urlpatterns = [
 
     # Catalogo de videojuegos
     path("juegos/", CatalogoJuegosView.as_view(), name="catalogo_juegos"),
+    path("rawg-hub/", RAWGHubView.as_view(), name="rawg_hub"),
     path("juegos/crear/", CrearJuegoView.as_view(), name="crear_juego"),
     path("juegos/<int:juego_id>/jugar/", JugarView.as_view(), name="jugar_juego"),
 

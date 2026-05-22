@@ -4,6 +4,13 @@ Django settings for core project.
 import os
 from pathlib import Path
 
+# Cargar variables de entorno desde .env
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv(
@@ -119,10 +126,15 @@ CELERY_TIMEZONE = TIME_ZONE
 # ============================================================================
 # Servicios externos: API de terceros (Adapter) y endpoint de equipo aliado
 # ============================================================================
+# Servicios externos: API de terceros (Adapter) y endpoint de equipo aliado
+# ============================================================================
 THIRD_PARTY_GAMES_API_URL = os.getenv(
     "THIRD_PARTY_GAMES_API_URL",
     "https://www.freetogame.com/api/games",
 )
+RAWG_API_URL = os.getenv("RAWG_API_URL", "https://api.rawg.io/api")
+RAWG_API_KEY = os.getenv("RAWG_API_KEY", "")
+
 ALLY_API_URL = os.getenv("ALLY_API_URL", "")  # URL del equipo aliado (configurable)
 ALLY_API_TIMEOUT = int(os.getenv("ALLY_API_TIMEOUT", "5"))
 

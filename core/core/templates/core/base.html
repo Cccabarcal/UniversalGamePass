@@ -63,6 +63,7 @@
                 <li><a href="{% url 'home' %}">{% trans "Inicio" %}</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'catalogo_juegos' %}">{% trans "Catálogo" %}</a></li>
+                    <li><a href="{% url 'rawg_hub' %}" style="color: #f59e0b; font-weight: 600;">🎮 RAWG Hub</a></li>
                     <li><a href="{% url 'terceros_info' %}">{% trans "Trending" %}</a></li>
                     <li><a href="{% url 'aliado_info' %}">{% trans "Aliado" %}</a></li>
                     <li><a href="{% url 'profile' %}">{% trans "Perfil" %}</a></li>

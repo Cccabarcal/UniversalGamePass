@@ -1,6 +1,6 @@
 """
 Vistas web para el módulo de Videojuegos:
-- Catálogo (listar)
+- Catálogo (listar con pestañas)
 - Jugar (ejecutar el juego HTML5)
 - Crear (solo staff)
 """
@@ -16,6 +16,7 @@ from django.views.generic import CreateView
 
 from core.models import Videojuego
 from core.services import usuario_tiene_suscripcion_activa
+from core.infra.adapters.games_provider import RAWGAdapter
 
 
 class VideojuegoForm(forms.ModelForm):
@@ -51,6 +52,31 @@ class CatalogoJuegosView(LoginRequiredMixin, View):
             {
                 "juegos": juegos,
                 "tiene_suscripcion": usuario_tiene_suscripcion_activa(request.user),
+            },
+        )
+
+
+class RAWGHubView(LoginRequiredMixin, View):
+    """Muestra juegos desde RAWG Hub - Hub de descubrimiento de juegos populares."""
+
+    def get(self, request):
+        # Intentar obtener juegos reales desde RAWG
+        rawg_adapter = RAWGAdapter()
+        juegos = rawg_adapter.listar_juegos_populares(limit=20)
+        tiene_error = False
+        
+        # Si RAWG no retorna juegos, usar datos de prueba
+        if not juegos:
+            from core.infra.adapters.games_provider import FakeGamesAdapter
+            fake_adapter = FakeGamesAdapter()
+            juegos = fake_adapter.listar_juegos_populares(limit=20)
+        
+        return render(
+            request,
+            "core/rawg_hub.html",
+            {
+                "juegos": juegos,
+                "tiene_error": tiene_error,
             },
         )
 
